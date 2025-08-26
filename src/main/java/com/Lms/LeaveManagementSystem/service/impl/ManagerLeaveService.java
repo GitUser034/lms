@@ -31,8 +31,7 @@ public class ManagerLeaveService {
       private UserRepository userRepository;
       @Autowired
       private ModelMapper modelMapper;
-      @Autowired
-      private Helper helper;
+  
 
       public List<LeaveResponseDto> getAllPendingRequests(String managerUsername) {
 
@@ -45,7 +44,7 @@ public class ManagerLeaveService {
                     .map(req -> modelMapper.map(req, LeaveResponseDto.class))
                     .collect(Collectors.toList());
       }
-      @Transactional
+ 
       public LeaveResponseDto updateLeaveStatus(Long leaveId, LeaveUpdateDto dto, String managerUsername) {
             LeaveRequest leave = leaveRequestRepository.findById(leaveId)
                     .orElseThrow(() -> new LeaveNotFoundException("Leave request not found"));
@@ -68,16 +67,8 @@ public class ManagerLeaveService {
 
             LeaveRequest updated = leaveRequestRepository.save(leave);
 
-            LeavePayload leavePayload = new LeavePayload(updated.getId(), user.getId(), user.getName(), user.getEmail(), updated.getFromDate(), updated.getToDate(), updated.getStatus(), updated.getActionedBy().getName(), updated.getActionedAt());
-            LeaveEvent event = new LeaveEvent(leavePayload);
-            if(dto.getStatus() == LeaveStatus.APPROVED ){
-                  event.setEventType("LEAVE_APPROVED");
-            }
-            else{
-                  event.setEventType("LEAVE_REJECTED");
-            }
-            System.out.println("Manager event is "+event);
-            helper.publishAfterCommit(event);
+            
             return modelMapper.map(updated, LeaveResponseDto.class);
       }
 }
+
