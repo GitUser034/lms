@@ -1,0 +1,12 @@
+spring:
+  cloud:
+    stream:
+      function:
+        definition: leaveEvent
+      bindings:
+        leaveEvent-out-0:
+          destination: leave-events
+          content-type: application/json
+      kafka:
+        binder:
+          brokers: localhost:9092
