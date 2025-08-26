@@ -35,7 +35,7 @@ public class LeaveService {
 
 
       // Apply for leave
-      @Transactional
+   
       public LeaveResponseDto applyLeave(String email, LeaveRequestDto dto) {
             User user = userRepository.findByEmail(email)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
@@ -81,4 +81,5 @@ public class LeaveService {
 
 
 }
+
 
