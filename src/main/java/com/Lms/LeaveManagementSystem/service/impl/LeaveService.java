@@ -33,8 +33,6 @@ public class LeaveService {
       @Autowired
       private ModelMapper mapper;
 
-      @Autowired
-      private Helper helper;
 
       // Apply for leave
       @Transactional
@@ -52,13 +50,6 @@ public class LeaveService {
             map.setUser(user);
             map.setStatus(LeaveStatus.PENDING);
             LeaveRequest save = leaveRequestRepository.save(map);
-            String actionedByName = save.getActionedBy() != null
-                    ? save.getActionedBy().getName()
-                    : null;
-            LeavePayload leavePayload = new LeavePayload(save.getId(), user.getId(), user.getName(), user.getEmail(), save.getFromDate(), save.getToDate(), save.getStatus(), actionedByName, save.getActionedAt());
-            LeaveEvent event = new LeaveEvent("LEAVE_REQUESTED", leavePayload);
-            System.out.println("Employee event is "+event);
-            helper.publishAfterCommit(event);
             return mapper.map(save, LeaveResponseDto.class);
 
       }
@@ -90,3 +81,4 @@ public class LeaveService {
 
 
 }
+
